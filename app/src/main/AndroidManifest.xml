@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:allowBackup="false"
-        android:label="APK Factory"
+        android:label="Filesym"
+        android:icon="@drawable/ic_filesym"
+        android:roundIcon="@drawable/ic_filesym"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:supportsRtl="true">
         <activity
