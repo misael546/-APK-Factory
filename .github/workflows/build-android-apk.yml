@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Filesym APK
 
 on:
   workflow_dispatch:
@@ -11,12 +11,15 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
     steps:
       - name: Check out source
         uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -26,19 +29,18 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Install Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Android platform and build tools
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Build debug APK
+      - name: Build Filesym APK
         run: gradle --no-daemon assembleDebug
 
-      - name: Upload APK
+      - name: Upload Filesym APK
         uses: actions/upload-artifact@v4
         with:
-          name: APK-Factory-debug
+          name: Filesym-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
